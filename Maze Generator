@@ -1,0 +1,61 @@
+maze_code = """
+import java.util.*;
+
+public class MazeGenerator {
+    static int N = 7, M = 7;
+    static char[][] maze;
+    static final int[] DX = {0, 1, 0, -1}; // Right, Down, Left, Up
+    static final int[] DY = {1, 0, -1, 0};
+    static Random rand = new Random();
+
+    public static void main(String[] args) {
+        maze = new char[N][M];
+        initializeMaze();
+        generateMaze(1, 1);
+        maze[0][1] = 'S'; // Start
+        maze[N - 1][M - 2] = 'E'; // End
+        printMaze();
+    }
+
+    // Step 3: Initialize Maze with Walls
+    static void initializeMaze() {
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < M; j++) {
+                maze[i][j] = '#';
+            }
+        }
+    }
+
+    // Step 4: Generate Maze using DFS
+    static void generateMaze(int x, int y) {
+        maze[x][y] = '.';
+        List<Integer> directions = Arrays.asList(0, 1, 2, 3);
+        Collections.shuffle(directions, rand);
+
+        for (int direction : directions) {
+            int nx = x + DX[direction] * 2;
+            int ny = y + DY[direction] * 2;
+            
+            if (isValid(nx, ny)) {
+                maze[x + DX[direction]][y + DY[direction]] = '.';
+                generateMaze(nx, ny);
+            }
+        }
+    }
+
+    // Step 5: Validate Next Move
+    static boolean isValid(int x, int y) {
+        return x > 0 && y > 0 && x < N - 1 && y < M - 1 && maze[x][y] == '#';
+    }
+
+    // Step 6: Print the Maze
+    static void printMaze() {
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < M; j++) {
+                System.out.print(maze[i][j]);
+            }
+            System.out.println();
+        }
+    }
+}
+"""
