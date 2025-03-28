@@ -1,0 +1,38 @@
+%%writefile PiSearch.java
+import java.io.*;
+import java.nio.file.*;
+
+public class PiSearch {
+    private static final String MILLION_PI_FILE = "/content/pi 1 million digits_djvu.txt";
+    private static final String BILLION_PI_FILE = "/content/pi1b.txt";
+
+    public static void main(String[] args) {
+        if (args.length < 1) {
+            System.out.println("Usage: java PiSearch <numeric_sequence>");
+            return;
+        }
+
+        String sequence = args[0];
+
+        // Search in both 1 Million and 1 Billion digits of Pi
+        int indexInMillion = searchInPi(MILLION_PI_FILE, sequence);
+        int indexInBillion = searchInPi(BILLION_PI_FILE, sequence);
+
+        // Display results
+        System.out.println("Index in First 1 Million Digits: " + indexInMillion);
+        System.out.println("Index in First 1 Billion Digits: " + indexInBillion);
+    }
+
+    private static int searchInPi(String filePath, String sequence) {
+        try {
+            // Read the entire Pi digits file
+            String piDigits = Files.readString(Path.of(filePath));
+
+            // Search for the sequence
+            return piDigits.indexOf(sequence);
+        } catch (IOException e) {
+            System.out.println("Error reading file: " + filePath);
+            return -1;
+        }
+    }
+}
